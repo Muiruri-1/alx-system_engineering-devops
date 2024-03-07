@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+if ! command -v nginx &>/dev/null; then
+    echo "Nginx is not installed. Please install Nginx first."
+    exit 1
+fi
+sed -i 's/#*listen\s*\(80\)\s*;/listen 80;/g' /etc/nginx/nginx.conf
+service nginx restart
