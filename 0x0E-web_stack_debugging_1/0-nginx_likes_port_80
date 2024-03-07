@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# This script checks and fixes Nginx configuration to listen on port 80 of all active IPv4 IPs
+
+# Check if Nginx is installed
+if ! command -v nginx &>/dev/null; then
+    echo "Nginx is not installed. Please install Nginx first."
+    exit 1
+fi
+
+# Check Nginx configuration
+nginx_config="/etc/nginx/nginx.conf"
+if ! grep -q "listen 80 default_server;" "$nginx_config"; then
+    # Backup the original configuration
+    cp "$nginx_config" "${nginx_config}.bak"
+    
+    # Append configuration to listen on port 80 for all IPv4 IPs
+    echo "listen 80 default_server;" | sudo tee -a "$nginx_config" >/dev/null
+    echo "listen [::]:80 default_server;" | sudo tee -a "$nginx_config" >/dev/null
+    
+    # Restart Nginx
+    sudo systemctl restart nginx
+    echo "Nginx configuration updated and restarted successfully."
+else
+    echo "Nginx is already configured to listen on port 80."
+fi
