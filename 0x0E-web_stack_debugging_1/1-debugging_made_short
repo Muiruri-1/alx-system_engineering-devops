@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-if ! command -v nginx &>/dev/null; then
-    echo "Nginx is not installed. Please install Nginx first."
-    exit 1
-fi
-sed -i 's/#*listen\s*\(80\)\s*;/listen 80;/g' /etc/nginx/nginx.conf
-service nginx restart
+#configures a Nginz server to listen to port 80
+
+#creates a symbolic link [-s option] between the Nginx configuration file
+#and the enabled sites directory
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+#restart nginz
+service nginx start
+#terminates the first nginx process
+kill "$(pgrep 'nginx' | head -1)"
