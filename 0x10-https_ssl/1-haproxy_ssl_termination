@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# This script sets up SSL termination on HAProxy for the subdomain www
+
+# Install HAProxy if not already installed
+sudo apt-get update
+sudo apt-get install -y haproxy
+
+# Install Certbot
+sudo apt-get install certbot -y
+
+# Obtain SSL certificate for the domain
+sudo certbot certonly --standalone -d www.<your_domain>
+
+# Configure HAProxy
+cat <<EOF | sudo tee /etc/haproxy/haproxy.cfg > /dev/null
+frontend www-http
+    bind *:80
+    redirect scheme https code 301 if !{ ssl_fc }
+
+frontend www-https
+    bind *:443 ssl crt /etc/letsencrypt/live/www.<your_domain>/fullchain.pem
+    reqadd X-Forwarded-Proto:\ https
+    default_backend www-backend
+
+backend www-backend
+    server webserver <your_web_server_ip>:80
+EOF
+
+# Restart HAProxy
+sudo service haproxy restart
+
+# Display HAProxy configuration
+echo "HAProxy configuration:"
+cat /etc/haproxy/haproxy.cfg
