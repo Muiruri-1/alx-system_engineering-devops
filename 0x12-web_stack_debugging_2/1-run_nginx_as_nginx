@@ -7,6 +7,9 @@ service nginx stop
 # Edit Nginx configuration file to run as nginx user
 sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
 
+# Configure Nginx to listen on port 8080
+sed -i 's/^\(listen\s*\)80/\18080/' /etc/nginx/sites-available/default
+
 # Restart Nginx service
 service nginx start
 
