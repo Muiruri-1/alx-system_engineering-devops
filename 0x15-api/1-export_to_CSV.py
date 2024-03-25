@@ -44,7 +44,7 @@ def get_employee_todo_progress(employee_id):
     employee_name = employee_info_response.json().get('username')
 
     # Write data to CSV file
-    filename = f"{employee_id}.csv"
+    filename = f"USER_ID.csv"
     with open(filename, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([

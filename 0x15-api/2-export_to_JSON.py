@@ -63,7 +63,7 @@ def export_to_csv(employee_id, employee_name, todos):
     Returns:
         None
     """
-    csv_filename = f'{USER_ID}.csv'
+    csv_filename = f'USER_ID.csv'
     with open(csv_filename, 'w', newline='') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow([
@@ -97,7 +97,7 @@ def export_to_json(employee_id, employee_name, todos):
     json_data = {str(employee_id): [{
         "task": todo['title'], "completed": todo['completed'],
         "username": employee_name} for todo in todos]}
-    json_filename = f'{USER_ID}.json'  # Correcting filename
+    json_filename = f'USER_ID.json'  # Correcting filename
     with open(json_filename, 'w') as jsonfile:
         json.dump(json_data, jsonfile, indent=4)
     print(f"TODO list progress {employee_name} exported to {json_filename}")
